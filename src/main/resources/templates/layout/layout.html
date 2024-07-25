@@ -11,94 +11,76 @@
 </head>
 
 <header th:fragment="header" id="header">
-  <div class="p-3 mb-2 bg-info-subtle text-info-emphasis">
-    <nav class="nav justify-content-center">
+
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+	<div class="container-fluid">
+	  
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		  
+		  <li class="nav-item">
+			<a class="nav-link" th:href="@{/}">Inicio</a>
+		  </li>
+
+		  <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+			<a class="nav-link"th:href="@{/users}">Usuarios</a>
+		  </li>
+
+		  <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+			<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+			  Gestion de Productos
+			</a>
+			<ul class="dropdown-menu">
+			  <li><a
+				class="dropdown-item"
+				aria-current="page"
+				th:href="@{/products}"
+				>Productos</a
+			  ></li>
+			  
+			  <li><hr class="dropdown-divider"></li>
+			  <li><a
+				class="dropdown-item"
+				aria-current="page"
+				th:href="@{/categories}"
+				>Categorias</a
+			  ></li>
+			</ul>
+		  </li>
+		  <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+			<a class="nav-link" th:href="@{/orders}">Pedidos</a>
+		  </li>
+		  <li class="nav-item" sec:authorize="hasRole('ROLE_CLIENTE')">
+			<a class="nav-link" th:href="@{/orders}">Catalogo</a>
+		  </li>
+		  <li class="nav-item" sec:authorize="hasRole('ROLE_CLIENTE')">
+			<a class="nav-link" th:href="@{/orders}">Mis Pedidos</a>
+		  </li>
+		  <li class="nav-item" sec:authorize="isAnonymous()">
+			<a class="nav-link" th:href="@{/orders}">Iniciar Sesion</a>
+		  </li>
+
+		  <li class="nav-item" sec:authorize="isAuthenticated()">
+			<a class="nav-link" href="#" onclick="document.getElementById('logoutForm').submit();">Salir</a>
+			<form
+				  id="logoutForm"
+				  th:action="@{/logout}"
+				  method="post"
+				  style="display: none"
+				>
+				  <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+				</form>
+		  </li>
+		  
+		</ul>
 		
+	  </div>
+	</div>
+  </nav>
 
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" th:href="@{/}">INICIO</a>
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link active"
-          aria-current="page"
-          th:href="@{/users}"
-          sec:authorize="hasRole('ROLE_ADMIN')"
-          >USUARIOS</a
-        >
-      </li>
 
-      <li sec:authorize="hasRole('ROLE_ADMIN')">
-        <div class="dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            aria-current="page"
-            >GESTIÓN DE PRODUCTOS</a
-          >
 
-          <ul class="dropdown-menu">
-            <li>
-              <a
-                class="dropdown-item"
-                aria-current="page"
-                th:href="@{/products}"
-                >PRODUCTOS</a
-              >
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
-                aria-current="page"
-                th:href="@{/categories}"
-                >CATEGORIAS</a
-              >
-            </li>
-          </ul>
-        </div>
-        <!--
-								<ul>
-									<li><a href="#">OPCION 1.2.1</a></li>
-									<li><a href="#">OPCION 1.2.2</a></li>
-								</ul>
-							-->
-      </li>
-      <li sec:authorize="hasRole('ROLE_ADMIN')">
-        <a class="nav-link active" aria-current="page" th:href="@{/orders}"
-          >PEDIDOS</a
-        >
-      </li>
-      <li sec:authorize="hasRole('ROLE_CLIENTE')">
-        <a class="nav-link active" aria-current="page" href="#">CATÁLOGO</a>
-      </li>
-      <li sec:authorize="hasRole('ROLE_CLIENTE')">
-        <a class="nav-link active" aria-current="page" href="#">MIS PEDIDOS</a>
-      </li>
-      <li sec:authorize="isAnonymous()">
-        <a class="nav-link active" aria-current="page" th:href="@{/login}"
-          >INICIAR SESIÓN</a
-        >
-      </li>
-      <li sec:authorize="isAuthenticated()">
-        <a
-          class="nav-link active"
-          aria-current="page"
-          href="#"
-          onclick="document.getElementById('logoutForm').submit();"
-          >SALIR</a
-        >
-        <form
-          id="logoutForm"
-          th:action="@{/logout}"
-          method="post"
-          style="display: none"
-        >
-          <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-        </form>
-      </li>
-    </nav>
-  </div>
 </header>
 
 <footer th:fragment="footer">
