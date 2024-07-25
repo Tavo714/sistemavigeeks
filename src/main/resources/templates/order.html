@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intranet IDAT</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container p-4">
+      <h1 class="pb-2" th:text="${title}">demo</h1>
+
+      <div
+        th:if="${orderHasCreated}"
+        class="alert alert-success"
+        role="alert"
+        th:text="${orderCreatedMessage}"
+      ></div>
+
+      <div
+        th:if="${orderHasModified}"
+        class="alert alert-warning"
+        role="alert"
+        th:text="${orderModifiedMessage}"
+      ></div>
+
+      <div th:if="${orderHasDeleted}" class="alert alert-danger" role="alert">
+        El producto se ha eliminado correctamente
+      </div>
+
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a
+          th:href="@{/orders/new}"
+          class="btn btn-primary"
+          tabindex="-1"
+          role="button"
+          aria-disabled="true"
+          >Nuevo Pedido</a
+        >
+      </div>
+
+      <div class="table-responsive pt-4">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th
+                scope="col"
+                th:each="header: ${headers}"
+                th:text="${header}"
+              ></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="order: ${orders}">
+              <th scope="row" th:text="${order.id}">1</th>
+              <td th:text="${order.idProducto}">Mark</td>
+              <td th:text="${order.producto}">Mark</td>
+              <td th:text="${order.cProducto}">Mark</td>
+              <td th:text="${order.pProducto}">Mark</td>
+              <td th:text="${order.total}">Mark</td>
+              <td th:text="${order.idUsuario}">Otto</td>
+              <td th:text="${order.fecha}">@mdo</td>
+              <td th:text="${order.estado}">@mdo</td>
+
+              <td>
+                <a
+                  th:href="@{'/orders/edit/' + ${order.id}}"
+                  class="btn"
+                  tabindex="-1"
+                  role="button"
+                  aria-disabled="true"
+                  >Editar</a
+                >
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  th:attr="onclick=|abrirModal(${order.id}, '${order.idProducto}', '${order.idUsuario}')|"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="button" onclick="back();" class="btn btn-primary">
+        Atras
+      </button>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="deleteModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="deleteModalLabel">
+              Eliminar Pedido
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p id="deleteMessage">Esta seguro que desea eliminar el pedido?</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              th:attr="onclick=|eliminarRegistro()|"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      const deleteModal = new bootstrap.Modal(
+        document.getElementById("deleteModal"),
+        { keyboard: false }
+      );
+
+      async function deleteData(url = "") {
+        const response = await fetch(url, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        return response;
+      }
+
+      let order = { id: 0, pedido: "", idUsuario: "", producto: "" };
+
+      function abrirModal(id, pedido, idUsuario, producto) {
+        order.id = id;
+        order.pedido = pedido;
+        order.idUsuario = idUsuario;
+        order.producto = producto;
+        let message = `Esta seguro que desea eliminar el pedido ${order.pedido} del usuario ${order.idUsuario} de ${order.producto}?`;
+        document.getElementById("deleteMessage").innerHTML = message;
+        deleteModal.show();
+      }
+
+      function eliminarRegistro() {
+        deleteData(`/orders/${order.id}`).then((data) => {
+          deleteModal.hide();
+          location.reload();
+        });
+      }
+    </script>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+  </body>
+</html>
