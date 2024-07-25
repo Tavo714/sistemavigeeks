@@ -1,115 +1,171 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="https://thymeleaf.org">
-	<head th:replace="~{layout/layout :: head}"></head>
-<body>
-	<header th:replace="~{layout/layout :: header}"></header>
+  <head th:replace="~{layout/layout :: head}"></head>
+  <body>
+    <header th:replace="~{layout/layout :: header}"></header>
     <div class="container p-4">
-        <h1 class="pb-2" th:text="${title}">demo</h1>
+      <h1 class="pb-2" th:text="${title}">demo</h1>
 
-        <div th:if="${userHasCreated}" class="alert alert-success" role="alert" th:text="${userCreatedMessage}">
-        </div>
+      <div
+        th:if="${userHasCreated}"
+        class="alert alert-success"
+        role="alert"
+        th:text="${userCreatedMessage}"
+      ></div>
 
-        <div th:if="${userHasModified}" class="alert alert-warning" role="alert" th:text="${userModifiedMessage}">
-        </div>
+      <div
+        th:if="${userHasModified}"
+        class="alert alert-warning"
+        role="alert"
+        th:text="${userModifiedMessage}"
+      ></div>
 
-        <div th:if="${userHasDeleted}" class="alert alert-danger" role="alert">
-          El usuario se ha eliminado correctamente
-        </div>
+      <div th:if="${userHasDeleted}" class="alert alert-danger" role="alert">
+        El usuario se ha eliminado correctamente
+      </div>
 
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <a th:href="@{/users/new}" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">Nuevo Usuario</a>
-        </div>
-        
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a
+          th:href="@{/users/new}"
+          class="btn btn-primary"
+          tabindex="-1"
+          role="button"
+          aria-disabled="true"
+          >Nuevo Usuario</a
+        >
+      </div>
 
-        <div class="table-responsive pt-4">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                      <th scope="col" th:each="header: ${headers}" th:text="${header}"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="user: ${users}">
-                      <th scope="row" th:text="${user.id}">1</th>
-                      <td th:text="${user.nombres}">Mark</td>
-                      <td th:text="${user.apellidos}">Otto</td>>
-                      <td th:text="${user.password}">@mdo</td>
-					  <td th:text="${user.estado}">@mdo</td>
-                      <td>
-                        <a th:href="@{'/users/edit/' + ${user.id}}" class="btn" tabindex="-1" role="button" aria-disabled="true">Editar</a>
-                        <button type="button" class="btn btn-danger" th:attr="onclick=|abrirModal(${user.id}, '${user.nombres}', '${user.apellidos}')|">Eliminar</button>
-                      </td>
-                    </tr>
-                  </tbody>
-            </table>
-        </div>
-        <button type="button" onclick="back();" class="btn btn-primary">
-          Atras
-        </button>
+      <div class="table-responsive pt-4">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th
+                scope="col"
+                th:each="header: ${headers}"
+                th:text="${header}"
+              ></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="user: ${users}">
+              <th scope="row" th:text="${user.id}">1</th>
+              <td th:text="${user.nombres}">Mark</td>
+              <td th:text="${user.apellidos}">Otto</td>
+              >
+              <td th:text="${user.password}">@mdo</td>
+              <td th:text="${user.estado}">@mdo</td>
+              <td>
+                <a
+                  th:href="@{'/users/edit/' + ${user.id}}"
+                  class="btn"
+                  tabindex="-1"
+                  role="button"
+                  aria-disabled="true"
+                  >Editar</a
+                >
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  th:attr="onclick=|abrirModal(${user.id}, '${user.nombres}', '${user.apellidos}')|"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="button" onclick="back();" class="btn btn-primary">
+        Atras
+      </button>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="deleteModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="deleteModalLabel">Eliminar Usuario</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h1 class="modal-title fs-5" id="deleteModalLabel">
+              Eliminar Usuario
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <p id="deleteMessage">Esta seguro que desea eliminar el usuario?</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" th:attr="onclick=|eliminarRegistro()|">Eliminar</button>
-  
-                      
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              th:attr="onclick=|eliminarRegistro()|"
+            >
+              Eliminar
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-
-
-    
-
-	<footer th:replace="~{layout/layout :: footer}"></footer>
+    <footer th:replace="~{layout/layout :: footer}"></footer>
   </body>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
   <script>
-    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'), { keyboard:false })
+    const deleteModal = new bootstrap.Modal(
+      document.getElementById("deleteModal"),
+      { keyboard: false }
+    );
 
     async function deleteData(url = "") {
       const response = await fetch(url, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-        }
+        },
       });
       return response;
     }
 
-
-    
-    let user = { id : 0, name : '', lastname: ''};
+    let user = { id: 0, name: "", lastname: "" };
 
     function abrirModal(id, name, lastname) {
       user.id = id;
       user.name = name;
       user.lastname = lastname;
       let message = `Esta seguro que desea eliminar al usuario ${user.name} ${user.lastname}?`;
-      document.getElementById('deleteMessage').innerHTML = message;
+      document.getElementById("deleteMessage").innerHTML = message;
       deleteModal.show();
     }
 
     function eliminarRegistro() {
-      deleteData(`/users/${user.id}`)
-        .then((data) => {
-          deleteModal.hide();
-          location.reload();
-        });
+      deleteData(`/users/${user.id}`).then((data) => {
+        deleteModal.hide();
+        location.reload();
+      });
     }
-
   </script>
   <script type="text/javascript" th:src="@{/js/script.js}"></script>
 </html>
