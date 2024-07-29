@@ -1,0 +1,18 @@
+.carousel-image {
+    height: 400px; /* Cambia esto al tamaño deseado */
+    width: 100%; /* Asegura que la imagen ocupe el ancho del contenedor */
+    object-fit: cover; /* Asegura que la imagen se ajuste bien al contenedor */
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente para mejor legibilidad */
+    padding: 20px; /* Espaciado alrededor del texto */
+    bottom: 0; /* Posiciona el caption en la parte inferior */
+    left: 0;
+    right: 0;
+}
+
+.carousel {
+    max-width: 1000px; /* Cambia esto al ancho máximo deseado para el carrusel */
+    margin: auto; /* Centra el carrusel horizontalmente */
+}
