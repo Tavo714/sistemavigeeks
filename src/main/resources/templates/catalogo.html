@@ -26,14 +26,14 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div th:each="product : ${products}" class="col">
                 <div class="card h-100 text-center">
-                    <img th:src="@{${product.imagen}}" class="card-img-top" alt="Producto"/>
+                    <img  th:src="@{${product.imagen}}" class="image card-img-top" alt="Producto"/>
                     <div class="card-body">
                         <h2 th:text="${product.producto}" class="card-title">Nombre del Producto</h2>
                         <p th:text="${product.descripcion}" class="card-text">Descripción del Producto</p>
                         <p class="card-price">Precio: S/ <span th:text="${product.precio}"></span></p>
                         <p class="card-stock">Stock: <span th:text="${product.stock}"></span> unidades</p>
                         <div>
-                            <button type="button" class="btn btn-primary" th:attr="onclick=|addToCart(${product.id}, '${product.producto}', '${product.descripcion}', '${product.precio}', '${product.stock}')|">Agregar al carrito</button>
+                            <button type="button" class="btn btn-primary" th:attr="onclick=|addToCart(${product.id}, '${product.imagen}', '${product.producto}', '${product.descripcion}', '${product.precio}', '${product.stock}')|">Agregar al carrito</button>
                         </div>
                     </div>
                 </div>

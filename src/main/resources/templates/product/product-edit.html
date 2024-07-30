@@ -91,7 +91,23 @@
             th:value="*{imagen}"
           />
         </div>
+		<div class="mb-3">
+		  <label class="form-label">Categoria</label>
+		  <select
+		    th:field="*{category.id}"
+		    class="form-control"
+		    required="required"
+		  >
+		    <option value="">SELECCIONE...</option>
+		    <option
+		      th:each="ca:${categories}"
+		      th:value="${ca.id}"
+		      th:text="${ca.categoria}"
+		    />
+		  </select>
+		</div>
 
+		
         <button type="submit" class="btn btn-primary">Modificar Datos</button>
         <button type="button" onclick="back();" class="btn btn-primary">
           Atras

@@ -40,6 +40,7 @@ public class SecurityConfig {
 	            .authorizeHttpRequests(authorize -> authorize
 	                .requestMatchers("/public/**").permitAll()
 	                .requestMatchers("/products/**").hasRole("ADMIN")
+	                .requestMatchers("/orders/cli/**").hasRole("CLIENTE")
 	                .requestMatchers("/orders/**").hasRole("ADMIN")
 	                .requestMatchers("/categories/**").hasRole("ADMIN")
 	                .requestMatchers("/users/**").permitAll()

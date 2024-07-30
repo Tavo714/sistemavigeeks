@@ -1,7 +1,9 @@
 package idat.pcds2.grupo3.sistemavigeeks.controllers;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import idat.pcds2.grupo3.sistemavigeeks.DTO.ProductDTO;
 import idat.pcds2.grupo3.sistemavigeeks.models.Orders;
 import idat.pcds2.grupo3.sistemavigeeks.services.OrderService;
 
@@ -67,6 +71,22 @@ public class OrderController {
         model.addAttribute("orderCreated", orderCreated);
         return "redirect:/orders";
     }
+    
+    @PostMapping("/cli/saveorder")
+    public ResponseEntity<String> saveOrderCli(@RequestBody Map<String, List<ProductDTO>> request) {
+        Orders order = new Orders();
+        order.setEstado("PENDIENTE");
+        LocalDate ahora = LocalDate.now();
+        order.setFecha(ahora);
+        order.setTotal(15D);
+        //orderService.insert(order);
+        // Aquí puedes procesar la lista de productos
+        System.out.println("Received products: " + request);
+
+        return ResponseEntity.ok("success");
+    }
+    
+    
 
     @GetMapping("/edit/{id}")
     public String goToOrderEditView(@PathVariable Long id, Model model) {
