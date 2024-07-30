@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://thymeleaf.org">
+		<head th:replace="~{layout/layout :: head}"></head>
+		
+		<style>
+			div{
+				
+				border: 1px solid black;
+				border-color: black;
+			}
+			
+		</style>
+	<body data-authenticated="${isAuthenticated}">
+		<header th:replace="~{layout/layout :: header}"></header>
+
+		<div class="wrapper-cart-content">
+			<div id="cart" class="cart">
+			</div>
+			<div id="subtotal">
+				<div id="comprar" sec:authorize="isAuthenticated()">
+					<div><input type="button" value="FINALIZAR COMPRA"></div>
+				</div>
+				
+			</div>
+		</div>
+		
+	<footer th:replace="~{layout/layout :: footer}"></footer>
+  </body>
+  <script>
+	
+	$( document ).ready(function() {
+	    showCart();
+	});
+	
+	
+	
+	
+
+  </script>
+</html>

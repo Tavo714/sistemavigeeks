@@ -19,6 +19,7 @@
     <header th:replace="~{layout/layout :: header}"></header>
     <div class="container p-4">
       <h1 th:text="${title}">demo</h1>
+      
     </div>
 
     <div class="container p-2">
@@ -26,6 +27,7 @@
         th:action="@{/products/save}"
         th:object="${currentProduct}"
         method="post"
+        enctype="multipart/form-data"
       >
         <div class="mb-3">
           <label for="producto" class="form-label">Producto</label>
@@ -85,7 +87,7 @@
         <div class="mb-3">
           <label class="form-label">Categoria</label>
           <select
-            th:field="*{category}"
+            th:field="*{category.id}"
             class="form-control"
             required="required"
           >
