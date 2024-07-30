@@ -2,25 +2,25 @@
 <html lang="en" xmlns="https://thymeleaf.org">
 		<head th:replace="~{layout/layout :: head}"></head>
 		
-		<style>
-			div{
-				
-				border: 1px solid black;
-				border-color: black;
-			}
-			
-		</style>
 	<body data-authenticated="${isAuthenticated}">
 		<header th:replace="~{layout/layout :: header}"></header>
+		<div class="container text-center mt-4">
+		        <h1>Carrito de Compras</h1>
+		    </div>
 
 		<div class="wrapper-cart-content">
-			<div id="cart" class="cart">
+			<div id="cart" class="wrapper-cart cart">
 			</div>
-			<div id="subtotal">
-				<div id="comprar" sec:authorize="isAuthenticated()">
-					<div><input type="button" value="FINALIZAR COMPRA"></div>
+			<div >
+				<div id="subtotal">
+					
 				</div>
-				
+				<div id="comprar" sec:authorize="isAuthenticated()">
+					<div><input type="button" onclick="buyAuthenticated();" value="FINALIZAR COMPRA"></div>
+				</div>
+				<div id="comprar" sec:authorize="isAnonymous()">
+									<div><input type="button" onclick="buyAnonymous();" value="FINALIZAR COMPRA"></div>
+								</div>
 			</div>
 		</div>
 		
@@ -33,7 +33,14 @@
 	});
 	
 	
+	function buyAnonymous(){
+		alert("Necesita Loguearse");
+	}
 	
+	function buyAuthenticated(){
+			alert("Realización de compra");
+			
+		}
 	
 
   </script>

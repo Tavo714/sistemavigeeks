@@ -36,7 +36,7 @@ public class CarritoController {
     @GetMapping("/view")
     public String viewCart(Model model) {
         model.addAttribute("cart", cartItemService.getCartItems());
-        return "cart"; 
+        return "Cart/cart"; 
     }
     @PostMapping("/remove")
     public String removeFromCart(@RequestParam("productId") Long productId) {
