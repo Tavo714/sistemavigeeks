@@ -55,4 +55,8 @@ public class ProductService {
         }
         return response.get();
     }
+
+    public List<Product> getByCategory(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId);
+    }
 }
