@@ -7,6 +7,8 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
   />
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+
   <title>SUASCON VIGEEKS II</title>
 </head>
 
@@ -37,45 +39,30 @@
           </li>
 
           <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
               Gestion de Productos
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a
-                  class="dropdown-item"
-                  aria-current="page"
-                  th:href="@{/products}"
-                  >Productos</a
-                >
+                <a class="dropdown-item" aria-current="page" th:href="@{/products}" >Productos</a>
               </li>
-
               <li><hr class="dropdown-divider" /></li>
               <li>
-                <a
-                  class="dropdown-item"
-                  aria-current="page"
-                  th:href="@{/categories}"
-                  >Categorias</a
-                >
+                <a class="dropdown-item" aria-current="page" th:href="@{/categories}" >Categorias</a>
               </li>
             </ul>
           </li>
           <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
             <a class="nav-link" th:href="@{/orders}">Pedidos</a>
           </li>
-          <li class="nav-item" sec:authorize="hasRole('ROLE_CLIENTE')">
-            <a class="nav-link" th:href="@{/catalog}">Catalogo</a>
-          </li>
-          <li class="nav-item" sec:authorize="hasRole('ROLE_CLIENTE')">
-            <a class="nav-link" th:href="@{/orders}">Mis Pedidos</a>
-          </li>
+		  	<li class="nav-item" sec:authorize="hasRole('ROLE_CLIENTE') or isAnonymous()"><a class="nav-link" th:href="@{/catalog}"  >Catálogo</a>
+		  		<ul class="nav-item">
+					<li th:each="item : ${menuProducts}">
+						<a th:href="@{/catalogue/{id}(id=${item.id})}" th:text="${item.categoria}"></a>
+					</li>
+		  		</ul>
+		  	</li>
+			<li class="nav-item" sec:authorize="hasRole('ROLE_CLIENTE')"><a class="nav-link" href="#" >Mis Pedidos</a></li>
           <li class="nav-item" sec:authorize="isAnonymous()">
             <a class="nav-link" th:href="@{/orders}">Iniciar Sesion</a>
           </li>
@@ -93,18 +80,14 @@
               method="post"
               style="display: none"
             >
-              <!--input type="hidden" name="_csrf" th:value="${_csrf.token}" /-->
             </form>
           </li>
         </ul>
-        <form class="d-flex" role="search">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success" type="submit">Search</button>
+        <form class="d-flex">
+          <a class="nav-link" style="color: wheat;" th:href="@{/cart/view}">Mi Carrito</a>
+		  <div th:href="@{/cart}" class="badge">
+		  			<span id="badge-number">0</span>
+		  		</div>
         </form>
       </div>
     </div>
@@ -112,5 +95,6 @@
 </header>
 
 <footer th:fragment="footer">
-  <script type="text/javascript" th:src="@{/js/script.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery-3.7.1.js}"></script>
+	<script type="text/javascript" th:src="@{/js/script.js}"></script>
 </footer>

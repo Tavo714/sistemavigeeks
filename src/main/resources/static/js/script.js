@@ -73,29 +73,57 @@ function saveCart(cart) {
 
 function showCart() {
 	           const cart = getCart();
-	           const cartContainer = document.getElementById('cart');
-	           cartContainer.innerHTML = ''; // Limpiar el contenedor
-
+	           const cartContainer = $('#cart');
+	           cartContainer.empty();
+			   
+			   const table = $(`
+			   			                   <table class="table table-striped">
+			   			                       <thead>
+			   			                           <tr>
+			   			                               <th>Producto</th>
+			   									   <th>Stock</th>
+			   			                               <th>Cantidad</th>
+			   			                               <th>Precio</th>
+			   			                               <th>Total</th>
+			   			                               <th>Acciones</th>
+			   			                           </tr>
+			   			                       </thead>
+			   			                       <tbody id="cart-body">
+			   			                           <!-- Las filas de productos se agregarán aquí dinámicamente -->
+			   			                       </tbody>
+			   			                   </table>
+			   			               `);
+			   				cartContainer.append(table);			   
+							const cartBody = $('#cart-body');
 	           if (cart.products.length === 0) {
 	               cartContainer.innerHTML = '<p>No hay productos en el carrito.</p>';
-
+				   const productRow = `
+				   				                    <tr>
+				   				                        <td  colspan="6"  style="text-align: center;" >No hay productos en el carrito.</td>
+				   				                    </tr>
+				   				                `;
+				   				                cartBody.append(productRow);
 				   document.querySelectorAll('#subtotal').forEach(element => element.remove());
 	               return;
 	           }
+			   
 
+				
 	           cart.products.forEach(product => {
-	               const productElement = document.createElement('div');
-	               productElement.classList.add('cart-item');
-	               productElement.innerHTML = `
-				   	<div class="cart-img"><img class="image"  src="/img/No_Image_Available.jpg" ></div>
-	                   <div class="cart-name">${product.name}</div>
-					   <div class="cart-cant-min" ><input class="btn-cart-rest" onclick=restProductCart(${product.id}) type="button" value="-"></div>
-	                   <div class="cart-cant" >Cantidad: ${product.quantity}</div>
-					   <div class="cart-cant-plus" ><input class="btn-cart-plus" onclick=plusProductCart(${product.id}) type="button" value="+"></div>
-					   <div class="cart-price" >Precio: S/ ${product.price}</div>
-					   <div class="cart-delete" ><input onclick=removeFromCart(${product.id}) type="button" value="ELIMINAR"></div>
-	               `;
-	               cartContainer.appendChild(productElement);
+				let precio = parseFloat(product.price).toFixed(2);
+				const productRow = `
+				                    <tr>
+				                        <td>${product.name}</td>
+										<td>${product.stock}</td>
+										<td><input class="btn-cart-plus" onclick=restProductCart(${product.id}) type="button" value="-"> <span>${product.quantity}</span>  <input class="btn-cart-plus" onclick=plusProductCart(${product.id}) type="button" value="+"></td>
+				                        <td>S/ ${precio}</td>
+				                        <td><span>S/ ${(product.quantity * product.price).toFixed(2)}</span></td>
+				                        <td>
+				                            <button class="btn btn-danger" onclick="removeFromCart(${product.id})">Eliminar</button>
+				                        </td>
+				                    </tr>
+				                `;
+				                cartBody.append(productRow);
 	           });
 			   subtotal();
 	       }
