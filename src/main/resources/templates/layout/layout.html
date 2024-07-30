@@ -8,11 +8,13 @@
     crossorigin="anonymous"
   />
   <link rel="stylesheet" th:href="@{/css/styles.css}">
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  
   <title>SUASCON VIGEEKS II</title>
 </head>
 
 <header th:fragment="header" id="header">
+	
   <nav class="navbar navbar-expand-lg navbar bg-dark border-bottom border-body" data-bs-theme="dark"> <!--bg-body-tertiary-->
 
     <div class="container-fluid">
@@ -83,12 +85,19 @@
             </form>
           </li>
         </ul>
-        <form class="d-flex">
+        <form sec:authorize="hasRole('ROLE_CLIENTE')" class="d-flex">
           <a class="nav-link" style="color: wheat;" th:href="@{/cart/view}">Mi Carrito</a>
 		  <div th:href="@{/cart}" class="badge">
 		  			<span id="badge-number">0</span>
 		  		</div>
         </form>
+		
+		<form sec:authorize="isAnonymous()" class="d-flex">
+		          <a class="nav-link" style="color: wheat;" th:href="@{/cart/view}">Mi Carrito</a>
+				  <div th:href="@{/cart}" class="badge">
+				  			<span id="badge-number">0</span>
+				  		</div>
+		        </form>
       </div>
     </div>
   </nav>
@@ -97,4 +106,5 @@
 <footer th:fragment="footer">
 	<script type="text/javascript" th:src="@{/js/jquery-3.7.1.js}"></script>
 	<script type="text/javascript" th:src="@{/js/script.js}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </footer>

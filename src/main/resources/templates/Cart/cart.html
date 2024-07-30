@@ -2,7 +2,7 @@
 <html lang="en" xmlns="https://thymeleaf.org">
 		<head th:replace="~{layout/layout :: head}"></head>
 		
-	<body data-authenticated="${isAuthenticated}">
+	<body>
 		<header th:replace="~{layout/layout :: header}"></header>
 		<div class="container text-center mt-4">
 		        <h1>Carrito de Compras</h1>
@@ -11,28 +11,86 @@
 		<div class="wrapper-cart-content">
 			<div id="cart" class="wrapper-cart cart">
 			</div>
-			<div >
-				<div id="subtotal">
+			<div class="cart-buy">
+				<div class="body-cart-buy" id="subtotal">
 					
 				</div>
-				<div id="comprar" sec:authorize="isAuthenticated()">
-					<div><input type="button" onclick="buyAuthenticated();" value="FINALIZAR COMPRA"></div>
+				<div >
+				<div id="comprar" class="footer-cart-buy" sec:authorize="isAuthenticated()">
+					<div><input type="button" onclick=" comprar();" class="btn btn-primary" value="FINALIZAR COMPRA"></div>
 				</div>
-				<div id="comprar" sec:authorize="isAnonymous()">
-									<div><input type="button" onclick="buyAnonymous();" value="FINALIZAR COMPRA"></div>
+				<div id="comprar" class="footer-cart-buy" sec:authorize="isAnonymous()">
+									<input type="button" class="btn btn-primary" onclick="buyAnonymous();" value="FINALIZAR COMPRA">
+								</div>
 								</div>
 			</div>
 		</div>
-		
+		<div class="overlay" id="loadingOverlay">Loading, please wait...</div>
 	<footer th:replace="~{layout/layout :: footer}"></footer>
   </body>
   <script>
 	
 	$( document ).ready(function() {
 	    showCart();
+		convertircart();
 	});
 	
+	function comprar() {
+	            Swal.fire({
+	                title: 'DESEA FINALIZAR LA COMPRA?',
+	                text: 'Una vez aceptado el Vendedor contactará con usted.',
+	                icon: 'warning',
+	                showCancelButton: true,
+	                confirmButtonColor: '#3085d6',
+	                cancelButtonColor: '#d33',
+	                confirmButtonText: 'Sí, confirmar Compra',
+	                cancelButtonText: 'Cancelar'
+	            }).then((result) => {
+	                if (result.isConfirmed) {
+						$('#loadingOverlay').show();
+						let cart = convertircart();
+						$.ajax({
+						    url: '/orders/cli/saveorder',  // Cambia la URL a la del endpoint al que deseas enviar la solicitud
+						    type: 'POST',
+						    contentType: 'application/json',
+						    data: JSON.stringify({ products: cart }), 
+						   }).done(function(response) {
+								Swal.fire(
+									'Confirmado!',
+									'Su pedido fue aceptado con éxito.',
+									'success'
+									);
+								}).fail(function(xhr, status, error) {
+								        console.error('Error:', error);
+								    }).always(function() {
+								        // Ocultar overlay
+								        $('#loadingOverlay').hide();
+								    });
+									localStorage.clear();
+									showCart();
+	                }
+	            });
+	        }
 	
+			function convertircart() {
+			    let cart = getCart();
+			    let productoscart = [];
+			    cart.products.forEach(product => {
+			        let Product = {
+			            id: product.id || null,
+			            producto: product.producto || "",
+			            descripcion: product.descripcion || "",
+			            precio: product.precio || 0.0,
+			            stock: product.stock || 0,
+			            imagen: product.imagen || "",
+			            quantity: product.quantity || 0
+			        };
+			        productoscart.push(Product);
+			    });
+			    return productoscart;
+			}
+			
+			
 	function buyAnonymous(){
 		alert("Necesita Loguearse");
 	}
