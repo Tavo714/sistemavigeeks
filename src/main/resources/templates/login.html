@@ -5,6 +5,16 @@
 		
 	</head>
 	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../static/css/password.css">
+	<style>
+		.show-password-toggle {
+		  position: absolute;
+		  right: 10px;
+		  top: 50%;
+		  transform: translateY(-50%);
+		  cursor: pointer;
+		}
+	  </style>
 <body>
 	<header th:replace="~{layout/layout :: header}"></header>
 		
@@ -26,17 +36,20 @@
 			            id="username" name="username" placeholder="nombre de usuario" type="text"/>
 			        </div>
 			        <div class="grid gap-2">
-			          <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="password" >
-			            Password
-			          </label>
-			          <input
-			            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-			            id="password"
-						name="password"
-			            type="password"
-			          />
-			        </div>
-			      </div>
+						<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="password">
+						  Password
+						</label>
+						<div class="relative">
+						  <input
+							class="eyeball-input h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+							id="password"
+							placeholder="password"
+							name="password"
+							type="password"
+						  />
+						  <span class="show-password-toggle" id="togglePassword">&#128065;</span>
+						</div>
+					  </div>
 			      <div class="p-6 flex items-center justify-between">
 			        <a class="text-sm font-medium text-primary hover:underline" href="#" rel="ugc">
 			          Crear mi cuenta
@@ -58,6 +71,7 @@
 			  </div>
 			</div>
 		</div>
-		<footer th:replace="~{layout/layout :: footer}"></footer>			
+		<footer th:replace="~{layout/layout :: footer}"></footer>	
+		<script src="../static/js/script.js"></script>		
 		</body>
 		</html>
