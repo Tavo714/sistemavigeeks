@@ -92,7 +92,20 @@
 			
 			
 	function buyAnonymous(){
-		alert("Necesita Loguearse");
+		Swal.fire({
+        title: 'Necesita iniciar sesión',
+        text: 'Debe estar logueado para finalizar la compra. Será redirigido a la página de inicio de sesión.',
+        icon: 'info',
+		showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Ir al Login',
+		cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/login';  // Cambia esta URL a la URL de tu página de inicio de sesión
+        }
+    });
+		
 	}
 	
 	function buyAuthenticated(){
