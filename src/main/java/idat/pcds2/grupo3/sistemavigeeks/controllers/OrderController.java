@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import idat.pcds2.grupo3.sistemavigeeks.DTO.ProductDTO;
-import idat.pcds2.grupo3.sistemavigeeks.models.Client;
+
 import idat.pcds2.grupo3.sistemavigeeks.models.Orders;
 
 import idat.pcds2.grupo3.sistemavigeeks.services.OrderService;
@@ -82,7 +82,7 @@ public class OrderController {
     public ResponseEntity<String> saveOrderCli(@RequestBody Map<String, List<ProductDTO>> request) {
         List<ProductDTO> products = request.get("products");
         Orders order = new Orders();
-        Client client = new Client();
+        
         order.setClient(null);
         order.setEstado("PENDIENTE");
         LocalDate ahora = LocalDate.now();

@@ -46,6 +46,7 @@
 	                confirmButtonText: 'Sí, confirmar Compra',
 	                cancelButtonText: 'Cancelar'
 	            }).then((result) => {
+					
 	                if (result.isConfirmed) {
 						$('#loadingOverlay').show();
 						let cart = convertircart();
@@ -58,8 +59,11 @@
 								Swal.fire(
 									'Confirmado!',
 									'Su pedido fue aceptado con éxito.',
-									'success'
-									);
+									'success',
+									
+									).then(() => {
+                        				window.location.href = '/pay/pasarela';  // Cambia esta URL a la URL de tu pasarela de pago
+                   				 	});;
 								}).fail(function(xhr, status, error) {
 								        console.error('Error:', error);
 								    }).always(function() {
@@ -68,6 +72,7 @@
 								    });
 									localStorage.clear();
 									showCart();
+									
 	                }
 	            });
 	        }

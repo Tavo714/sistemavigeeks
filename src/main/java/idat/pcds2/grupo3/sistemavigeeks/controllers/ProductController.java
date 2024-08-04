@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import idat.pcds2.grupo3.sistemavigeeks.models.Category;
 import idat.pcds2.grupo3.sistemavigeeks.models.Product;
 import idat.pcds2.grupo3.sistemavigeeks.repositories.CategoryRepository;
-import idat.pcds2.grupo3.sistemavigeeks.services.CategoryService;
 import idat.pcds2.grupo3.sistemavigeeks.services.ProductService;
 
 
@@ -29,8 +28,7 @@ public class ProductController {
 	@Autowired
 	private CategoryRepository categoryRep;
 	
-	@Autowired
-	private CategoryService categoryService;
+	
 
     private ProductService productService;
     private Product productCreated;
