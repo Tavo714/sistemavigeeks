@@ -18,26 +18,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import idat.pcds2.grupo3.sistemavigeeks.DTO.ProductDTO;
+import idat.pcds2.grupo3.sistemavigeeks.models.Client;
 import idat.pcds2.grupo3.sistemavigeeks.models.Orders;
-import idat.pcds2.grupo3.sistemavigeeks.models.Product;
+
 import idat.pcds2.grupo3.sistemavigeeks.services.OrderService;
-import idat.pcds2.grupo3.sistemavigeeks.services.ProductService;
+
 
 @Controller
 @RequestMapping("/orders")
 
 public class OrderController {
 
-    private ProductService productService;
     private OrderService orderService;
     
     private Orders orderCreated;
     private Orders orderModified;
     private boolean orderDeleted;
 
-    public OrderController(ProductService productService, OrderService orderService){
+    public OrderController( OrderService orderService){
         this.orderService = orderService;
-        this.productService = productService;
+        
         orderService = null;
         orderModified = null;
         orderDeleted = false;
@@ -82,6 +82,8 @@ public class OrderController {
     public ResponseEntity<String> saveOrderCli(@RequestBody Map<String, List<ProductDTO>> request) {
         List<ProductDTO> products = request.get("products");
         Orders order = new Orders();
+        Client client = new Client();
+        order.setClient(null);
         order.setEstado("PENDIENTE");
         LocalDate ahora = LocalDate.now();
         order.setFecha(ahora);
@@ -89,33 +91,7 @@ public class OrderController {
                            .mapToDouble(product -> product.getPrecio() * product.getQuantity())
                            .sum();
         order.setTotal(total);
-        try {
-        // Guardar la orden en la base de datos
-        //orderService.insert(order);
-
-        // Actualizar el stock de los productos
-        for (ProductDTO product : products) {
-            // Obtén el producto desde la base de datos usando el ID del producto
-            Product dbProduct = productService.getById(product.getId());
-            if (dbProduct == null) {
-                return ResponseEntity.badRequest().body("Product not found: " + product.getId());
-            }
-
-            // Verifica si hay suficiente stock
-            if (dbProduct.getStock() < product.getQuantity()) {
-                return ResponseEntity.badRequest().body("Insufficient stock for product: " + product.getId());
-            }
-
-            // Actualiza el stock
-            dbProduct.setStock(dbProduct.getStock() - product.getQuantity());
-            productService.update(dbProduct);  // Guarda los cambios en la base de datos
-        }
-
-    }
-    catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process order.");
-        }
-        
+        orderService.processOrder(order, products);
         System.out.println("Received products: " + request);
 
         return ResponseEntity.ok("success");
