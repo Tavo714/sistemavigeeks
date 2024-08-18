@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import idat.pcds2.grupo3.sistemavigeeks.DTO.ClientDTO;
 import idat.pcds2.grupo3.sistemavigeeks.models.Role;
 import idat.pcds2.grupo3.sistemavigeeks.models.User;
+import idat.pcds2.grupo3.sistemavigeeks.services.ClientService;
 import idat.pcds2.grupo3.sistemavigeeks.services.CustomeFieldValidationException;
 import idat.pcds2.grupo3.sistemavigeeks.services.RoleService;
 import idat.pcds2.grupo3.sistemavigeeks.services.UserService;
@@ -29,7 +33,11 @@ public class UserController {
 	@Autowired
 	private RoleService roleService;
 	
+	
     private UserService userService;
+    
+    @Autowired
+    private ClientService clientService;
     
     
     private User userCreated;
@@ -74,6 +82,15 @@ public class UserController {
         model.addAttribute("currentUser", user);
         return "user/user-create";
     }
+    
+    @GetMapping("/newclient")
+    public String goToClientCreateView(Model model, User user) {
+    	
+    	
+        model.addAttribute("title", "Nuevo Cliente");
+        model.addAttribute("client", new ClientDTO());
+        return "login/login-create-cliente";
+    }
 
     @PostMapping("/save")
     public String save( @ModelAttribute("currentUser") User entity,BindingResult result, Model model, RedirectAttributes redirectAttributes) {
@@ -87,14 +104,52 @@ public class UserController {
             model.addAttribute("roles", roles);
             model.addAttribute("currentUser", entity);
     		result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+    		redirectAttributes.addFlashAttribute("error", "No Registrado");
+    		System.out.println("validacion usuario");
             return "user/user-create";
     	}catch (Exception e) {
-    		System.out.println("error sin saber");
+    		redirectAttributes.addFlashAttribute("error", "No Registrado");
+    		System.out.println("error sin saber"+ e.getMessage());
+    		return "user/user-create";
     	}
+    	redirectAttributes.addFlashAttribute("success", "Registrado");
     	model.addAttribute("userCreated", userCreated);
         return "redirect:/users";
     }
 
+    @PostMapping("/saveclient")
+    public String saveClient( @ModelAttribute("client") ClientDTO entity,BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    	
+    	try {
+    		userCreated = userService.insertClient(entity);
+    		redirectAttributes.addFlashAttribute("success", "Registrado");
+        	model.addAttribute("userCreated", userCreated);
+        	return "redirect:/login";
+    	} catch (CustomeFieldValidationException cfve) {
+        	
+            model.addAttribute("title", "Nuevo Usuario");
+            model.addAttribute("currentUser", new ClientDTO());
+            result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+            return "login/login-create-cliente";
+    	}catch (Exception e) {
+    		System.out.println("error sin saber");
+    		redirectAttributes.addFlashAttribute("error", "No Registrado");
+            return "redirect:/newclient"; 
+    	}
+    	
+    }
+    
+    @PostMapping("/cli/updatecli")
+    @ResponseBody
+    public String saveClientAct(@RequestBody ClientDTO entity, Model model) {
+    	
+    	clientService.updateClient(entity);
+    	
+    	
+    	return "hecho";
+    }
+    
+    
     @GetMapping("/edit/{id}")
     public String goToUserEditView(@PathVariable Long id, Model model) {
         User toUpdate = userService.getById(id);

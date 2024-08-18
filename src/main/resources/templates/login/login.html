@@ -9,7 +9,7 @@
 	<header th:replace="~{layout/layout :: header}"></header>
 		
 		<div class="bg-background  flex items-center justify-center">
-			<div class="flex min-h-[100dvh] flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+			<div class="flex min-h-[100dvh] flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8" >
 			  <div class="mx-auto max-w-md space-y-4">
 			    <div class="text-center">
 			      <h1 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">BIENVENIDO A SUASCON VIGEEKS </h1>
@@ -23,7 +23,7 @@
 			          </label>
 			          <input
 			            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-			            id="username" name="username" placeholder="nombre de usuario" type="text"/>
+			            id="username" name="username" placeholder="username" type="text"/>
 			        </div>
 			        <div class="grid gap-2">
 			          <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="password" >
@@ -33,16 +33,17 @@
 			            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 			            id="password"
 						name="password"
+						placeholder="password"
 			            type="password"
 			          />
 			        </div>
 			      </div>
 			      <div class="p-6 flex items-center justify-between">
-			        <a class="text-sm font-medium text-primary hover:underline" href="#" rel="ugc">
+			        <a class="text-sm font-medium text-primary hover:underline" th:href="@{/users/newclient}" rel="ugc">
 			          Crear mi cuenta
 			        </a>
 			        <button
-			          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 ml-auto"
+			          class="text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 ml-auto"
 			          type="submit"
 			        >
 			          Ingresar
@@ -58,6 +59,7 @@
 			  </div>
 			</div>
 		</div>
+		
 		<footer th:replace="~{layout/layout :: footer}"></footer>			
 		</body>
 		</html>
