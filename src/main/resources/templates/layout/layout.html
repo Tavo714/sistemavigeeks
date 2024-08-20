@@ -65,8 +65,13 @@
 		  		</ul>
 		  	</li>
 			<li class="nav-item" sec:authorize="hasRole('ROLE_CLIENTE')"><a class="nav-link" href="#" >Mis Pedidos</a></li>
+			<li class="nav-item dropdown" sec:authorize="hasRole('ROLE_CLIENTE')" >
+						            <a class="nav-link " th:href="@{/clients}" role="button"  >
+										Mi Cuenta
+						            </a>
+						          </li>
           <li class="nav-item" sec:authorize="isAnonymous()">
-            <a class="nav-link" th:href="@{/orders}">Iniciar Sesion</a>
+            <a class="nav-link " th:href="@{/login}">Iniciar Sesion</a>
           </li>
 
           <li class="nav-item" sec:authorize="isAuthenticated()">
@@ -101,10 +106,20 @@
       </div>
     </div>
   </nav>
+  
+  <div class="alert alert-success alert-dismissible fade show" th:if="${success != null}">
+      <label th:text="${success}"></label>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <div class="alert alert-success alert-dismissible fade show" th:if="${error != null}">
+        <label th:text="${error}"></label>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 </header>
 
 <footer th:fragment="footer">
 	<script type="text/javascript" th:src="@{/js/jquery-3.7.1.js}"></script>
 	<script type="text/javascript" th:src="@{/js/script.js}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </footer>
