@@ -8,8 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import idat.pcds2.grupo3.sistemavigeeks.DTO.ClientDTO;
+import idat.pcds2.grupo3.sistemavigeeks.models.Client;
 import idat.pcds2.grupo3.sistemavigeeks.models.Role;
 import idat.pcds2.grupo3.sistemavigeeks.models.User;
+import idat.pcds2.grupo3.sistemavigeeks.repositories.ClientRepository;
+import idat.pcds2.grupo3.sistemavigeeks.repositories.RoleRepository;
 import idat.pcds2.grupo3.sistemavigeeks.repositories.UserRepository;
 
 @Service
@@ -18,6 +22,12 @@ public class UserService {
 	@Autowired
 	private RoleService roleService;
 	
+	@Autowired
+	private ClientRepository clientRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
+	
 	private UserRepository userRepository;
     BCryptPasswordEncoder bCryptPasswordEncoder;
     
@@ -25,6 +35,14 @@ public class UserService {
     public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+    
+    
+    public User findByUsername(String username){
+    	
+    	User u = userRepository.findByUsername(username);
+    	
+    	return u;
     }
     
     public void createAdminUserIfNotExist() {
@@ -58,6 +76,35 @@ public class UserService {
     	
         return userRepository.saveAndFlush(entity);
     }
+    
+    public User insertClient(ClientDTO entity) throws Exception {
+    	
+    	User u = new User();
+    	u.setNombres(entity.getNombres());
+    	u.setApellidos(entity.getApellidos());
+    	u.setUsername(entity.getUsername());
+    	u.setPassword(entity.getPassword());
+    	u.setRoles(roleRepository.findByNombre("ROLE_CLIENTE"));
+    	if(checkUsernameAvailable(u)) {
+    		String encodedPassword = bCryptPasswordEncoder.encode(u.getPassword());
+    		u.setPassword(encodedPassword);
+    		u = userRepository.saveAndFlush(u);
+    		
+    		Client c = new Client();
+    		
+    		c.setUser_id(u);
+    		c.setEmail(entity.getEmail());
+    		c.setEmpresa(entity.getEmpresa());
+    		c.setRuc(entity.getRuc());
+    		c.setTelefono(entity.getTelefono());
+    		c = clientRepository.saveAndFlush(c);
+    		return u;
+    	}else {
+    		return new User();
+    	}
+    	
+        
+    }
 
     public User update(User entity){
         Optional<User> response = userRepository.findById(entity.getId());
@@ -73,7 +120,19 @@ public class UserService {
     }
 
     public boolean delete(Long id){
-        userRepository.deleteById(id);
+    	
+    	
+    	
+    	User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    	user.getRoles().clear();
+    	
+    	Client client = clientRepository.findClientbyUser(user.getId());
+        if (client != null) {
+            clientRepository.delete(client);
+        }
+    	
+    	
+    	userRepository.delete(user);
         return true;
     }
 
